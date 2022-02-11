@@ -4,6 +4,10 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 import { ethers } from "hardhat";
+// import { LedgerSigner } from "@ethersproject/hardware-wallets";
+import { LedgerSigner } from "@anders-t/ethers-ledger";
+import { formatEther } from "@ethersproject/units";
+
 
 async function main() {
 	// Hardhat always runs the compile task when running scripts with its command
@@ -14,12 +18,22 @@ async function main() {
 	// await hre.run('compile');
 
 	// We get the contract to deploy
-	const Greeter = await ethers.getContractFactory("Greeter");
-	const greeter = await Greeter.deploy("Hello, Hardhat!");
+	console.log("------------- start ---------")
+	let Greeter = await ethers.getContractFactory("Greeter");
+	console.log("------------- get ledger signer ---------")
+	// const ledger = new LedgerSigner();
+	const ledger = new LedgerSigner();
+	console.log("------------- log info ---------")
+	console.log("deployer", await ledger.getAddress(),formatEther(await ledger.getBalance()))
+	console.log("nounce", await ledger.getTransactionCount())
+	console.log("------------- connect signer ---------")
+	Greeter =(Greeter).connect(ledger);
+ let greeter = 	await Greeter.deploy("hi");
+ await greeter.deployed()
 
-	await greeter.deployed();
 
 	console.log("Greeter deployed to:", greeter.address);
+	console.log(await greeter.greet())
 }
 
 // We recommend this pattern to be able to use async/await everywhere

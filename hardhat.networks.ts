@@ -29,6 +29,13 @@ export const networks: NetworksUserConfig = {
 		},
 		allowUnlimitedContractSize: true,
 	},
+		goerli: {
+		url: `https://goerli.infura.io/v3/${process.env.INFURA_KEY}`,
+		blockGasLimit: 200000000,
+		accounts: {
+			mnemonic: process.env.MNEMONIC,
+		},
+	},
 
 	kovan: {
 		chainId: 42,
