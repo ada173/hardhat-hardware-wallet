@@ -9,6 +9,7 @@ import { LedgerSigner } from "@anders-t/ethers-ledger";
 import { formatEther } from "@ethersproject/units";
 
 
+
 async function main() {
 	// Hardhat always runs the compile task when running scripts with its command
 	// line interface.
@@ -22,10 +23,14 @@ async function main() {
 	let Greeter = await ethers.getContractFactory("Greeter");
 	console.log("------------- get ledger signer ---------")
 	// const ledger = new LedgerSigner();
-	const ledger = new LedgerSigner();
+	const ledger = new LedgerSigner(ethers.provider);
 	console.log("------------- log info ---------")
 	console.log("deployer", await ledger.getAddress(),formatEther(await ledger.getBalance()))
 	console.log("nounce", await ledger.getTransactionCount())
+
+	// const nonceManager = new NonceManager(ledger);
+	console.log("------------- set nonce ---------")
+	//  nonceManager.setTransactionCount(8);
 	console.log("------------- connect signer ---------")
 	Greeter =(Greeter).connect(ledger);
  let greeter = 	await Greeter.deploy("hi");
